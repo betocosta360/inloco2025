@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  titulo    String?
+  subtitulo String?
+  descricao String?
+  imagem    String
+  link      String?
+  ordem     Int      @default(0)
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Equipe {
+  id        String   @id @default(cuid())
+  nome      String
+  cargo     String
+  imagem    String
+  descricao String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Curso {
+  id        String   @id @default(cuid())
+  nome      String
+  descricao String
+  duracao   String
+  nivel     String
+  preco     String
+  imagem    String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  alunos    Aluno[]
+}
+
+model Aluno {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  telefone  String
+  endereco  String
+  foto      String?
+  nomePais  String?
+  telefoneContato String? // Outro contato (pais/responsaveis)
+  
+  // Relacionamento com Curso
+  cursoId   String
+  curso     Curso    @relation(fields: [cursoId], references: [id])
+  
+  // Controle Interno Financeiro
+  financeiros Financeiro[]
+  
+  // Vinculo com Depoimentos (para buscar foto)
+  depoimentos Depoimento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Financeiro {
+  id              String   @id @default(cuid())
+  alunoId         String
+  aluno           Aluno    @relation(fields: [alunoId], references: [id])
+  valor           Float
+  dataVencimento  DateTime
+  dataPagamento   DateTime?
+  status          String   @default("PENDENTE") // PENDENTE, PAGO, ATRASADO
+  descricao       String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Depoimento {
+  id        String   @id @default(cuid())
+  nome      String
+  curso     String
+  texto     String
+  imagem    String?
+  aprovado  Boolean  @default(false)
+  
+  // Link opcional com Aluno para buscar foto automaticamente
+  alunoId   String?
+  aluno     Aluno?   @relation(fields: [alunoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promocao {
+  id        String   @id @default(cuid())
+  titulo    String
+  desconto  String
+  cupom     String?
+  ativa     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Administrador {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String   
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Configuracao {
+  id              String   @id @default("singleton")
+  historia        String   @db.Text
+  historiaImagem  String?  @db.Text
+  missao          String   @db.Text
+  visao           String   @db.Text
+  valores         String   @db.Text
+  updatedAt       DateTime @updatedAt
+}
