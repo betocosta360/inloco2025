@@ -1,9 +1,12 @@
 import { getFinanceiro, deleteFinanceiro } from "@/lib/actions";
 import Link from "next/link";
 import DeleteButton from "@/components/admin/DeleteButton";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function FinanceiroPage() {
-    const financeiro = await getFinanceiro();
+export default async function FinanceiroPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+    const params = await searchParams;
+    const currentPage = Number(params.page) || 1;
+    const { data: financeiro = [], total = 0 } = await getFinanceiro(currentPage, 10);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -40,7 +43,7 @@ export default async function FinanceiroPage() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100">
-                        {financeiro.length === 0 ? (
+                        {(!financeiro || financeiro.length === 0) ? (
                             <tr>
                                 <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 italic text-sm">
                                     Nenhum lançamento financeiro registrado.
@@ -77,6 +80,12 @@ export default async function FinanceiroPage() {
                     </tbody>
                 </table>
             </div>
+
+            <Pagination
+                totalItems={total}
+                itemsPerPage={10}
+                currentPage={currentPage}
+            />
         </div>
     );
 }

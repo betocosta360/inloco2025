@@ -47,11 +47,12 @@ export default function TestimonialForm() {
     }
 
     return (
-        <section className="py-16 bg-zinc-50 border-y border-zinc-200" id="quero-comentar">
+        <section className="py-24 bg-zinc-50 border-y border-zinc-200" id="quero-comentar">
             <div className="max-w-screen-xl mx-auto px-4 md:px-8">
-                <div className="max-w-2xl mx-auto text-center mb-12">
-                    <h2 className="text-3xl font-black text-zinc-900 sm:text-4xl tracking-tight">Deixe seu Depoimento</h2>
-                    <p className="mt-4 text-zinc-600 font-medium">Sua opinião é fundamental para crescermos e ajudarmos mais alunos.</p>
+                <div className="max-w-2xl mx-auto text-center mb-20">
+                    <h2 className="text-4xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter sm:text-5xl">Deixe seu Depoimento</h2>
+                    <div className="mt-4 w-20 h-1.5 bg-zinc-900 dark:bg-zinc-100 mx-auto rounded-full"></div>
+                    <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">Sua opinião é fundamental para crescermos e ajudarmos mais alunos.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-xl shadow-zinc-200/50 border border-zinc-100 flex flex-col gap-6">

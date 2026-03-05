@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -38,10 +39,12 @@ model Curso {
   nivel     String
   preco     String
   imagem    String
+  conteudo  String?
   ativo     Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   alunos    Aluno[]
+  turmas    Turma[]
 }
 
 model Aluno {
@@ -58,6 +61,10 @@ model Aluno {
   cursoId   String
   curso     Curso    @relation(fields: [cursoId], references: [id])
   
+  // Relacionamento com Turma
+  turmaId   String?
+  turma     Turma?   @relation(fields: [turmaId], references: [id])
+  
   // Controle Interno Financeiro
   financeiros Financeiro[]
   
@@ -66,6 +73,38 @@ model Aluno {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Professor {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  biografia String?
+  imagem    String?
+  ativo     Boolean  @default(true)
+  turmas    Turma[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Turma {
+  id          String   @id @default(cuid())
+  nome        String
+  horario     String   // Ex: 19:00 - 21:00
+  diasSemana  String   // Ex: Segunda, Quarta, Sexta
+  
+  cursoId     String
+  curso       Curso    @relation(fields: [cursoId], references: [id])
+  
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id])
+  
+  alunos      Aluno[]
+  
+  ativo       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Financeiro {
@@ -122,8 +161,29 @@ model Configuracao {
   id              String   @id @default("singleton")
   historia        String
   historiaImagem  String?
+  historiaVideo   String?
   missao          String
   visao           String
   valores         String
+  telefone        String?
+  email           String?
+  endereco        String?
+  instagram       String?
+  facebook        String?
+  youtube         String?
+  linkedin        String?
+  tiktok          String?
+  slogan          String?
   updatedAt       DateTime @updatedAt
+}
+
+model Despesa {
+  id          String   @id @default(cuid())
+  descricao   String
+  valor       Float
+  vencimento  DateTime
+  categoria   String   // Aluguel, Salários, Contas Fixas, etc.
+  pago        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

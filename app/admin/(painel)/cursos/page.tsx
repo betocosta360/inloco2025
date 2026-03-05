@@ -1,9 +1,12 @@
 import { getCursos, deleteCurso } from "@/lib/actions";
 import Link from "next/link";
 import DeleteButton from "@/components/admin/DeleteButton";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminCursos() {
-    const cursos = await getCursos();
+export default async function AdminCursos({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+    const params = await searchParams;
+    const currentPage = Number(params.page) || 1;
+    const { data: cursos = [], total = 0 } = await getCursos(currentPage, 10);
 
     return (
         <div className="space-y-6">
@@ -29,7 +32,7 @@ export default async function AdminCursos() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100">
-                        {cursos.length === 0 ? (
+                        {(!cursos || cursos.length === 0) ? (
                             <tr>
                                 <td colSpan={2} className="px-6 py-12 text-center text-zinc-500 italic text-sm">
                                     Nenhum curso cadastrado.
@@ -49,6 +52,12 @@ export default async function AdminCursos() {
                     </tbody>
                 </table>
             </div>
+
+            <Pagination
+                totalItems={total}
+                itemsPerPage={10}
+                currentPage={currentPage}
+            />
         </div>
     );
 }

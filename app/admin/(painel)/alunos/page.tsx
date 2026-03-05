@@ -1,9 +1,23 @@
-import { getAlunos, deleteAluno } from "@/lib/actions";
+import { getAlunos, deleteAluno, getProfessorByEmail } from "@/lib/actions";
 import Link from "next/link";
 import DeleteButton from "@/components/admin/DeleteButton";
+import { cookies } from "next/headers";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AlunosPage() {
-    const alunos = await getAlunos();
+export default async function AlunosPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+    const params = await searchParams;
+    const currentPage = Number(params.page) || 1;
+    const cookieStore = await cookies();
+    const role = cookieStore.get('userRole')?.value;
+    const email = cookieStore.get('userEmail')?.value;
+
+    let professorId = undefined;
+    if (role === 'PROFESSOR' && email) {
+        const prof = await getProfessorByEmail(email);
+        professorId = prof?.id;
+    }
+
+    const { data: alunos = [], total = 0 } = await getAlunos(professorId, currentPage, 10);
 
     return (
         <div className="space-y-6">
@@ -12,12 +26,14 @@ export default async function AlunosPage() {
                     <h2 className="text-2xl font-bold text-zinc-800 tracking-tight">Gestão de Alunos</h2>
                     <p className="text-zinc-500 text-sm">Controle interno de estudantes e matrículas.</p>
                 </div>
-                <Link
-                    href="/admin/alunos/novo"
-                    className="bg-zinc-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-zinc-800 transition-colors flex items-center gap-2"
-                >
-                    <span>+ Novo Aluno</span>
-                </Link>
+                {role !== 'PROFESSOR' && (
+                    <Link
+                        href="/admin/alunos/novo"
+                        className="bg-zinc-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-zinc-800 transition-colors flex items-center gap-2"
+                    >
+                        <span>+ Novo Aluno</span>
+                    </Link>
+                )}
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
@@ -26,14 +42,15 @@ export default async function AlunosPage() {
                         <tr className="bg-zinc-50 border-b border-zinc-200">
                             <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Aluno</th>
                             <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Curso</th>
+                            <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Turma</th>
                             <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Contato</th>
                             <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider text-right">Ações</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100">
-                        {alunos.length === 0 ? (
+                        {(!alunos || alunos.length === 0) ? (
                             <tr>
-                                <td colSpan={4} className="px-6 py-12 text-center text-zinc-500 italic text-sm">
+                                <td colSpan={5} className="px-6 py-12 text-center text-zinc-500 italic text-sm">
                                     Nenhum aluno cadastrado.
                                 </td>
                             </tr>
@@ -61,11 +78,18 @@ export default async function AlunosPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
+                                        <div className="text-sm text-zinc-600 font-medium">{aluno.turma?.nome || '-'}</div>
+                                    </td>
+                                    <td className="px-6 py-4">
                                         <div className="text-sm text-zinc-600">{aluno.telefone}</div>
                                     </td>
                                     <td className="px-6 py-4 text-right space-x-4">
-                                        <Link href={`/admin/alunos/${aluno.id}`} className="text-zinc-400 hover:text-zinc-900 text-sm font-medium transition-colors underline-offset-4 hover:underline">Editar</Link>
-                                        <DeleteButton id={aluno.id} onDelete={deleteAluno} />
+                                        <Link href={`/admin/alunos/${aluno.id}`} className="text-zinc-400 hover:text-zinc-900 text-sm font-medium transition-colors underline-offset-4 hover:underline">
+                                            {role === 'PROFESSOR' ? 'Visualizar' : 'Editar'}
+                                        </Link>
+                                        {role !== 'PROFESSOR' && (
+                                            <DeleteButton id={aluno.id} onDelete={deleteAluno} />
+                                        )}
                                     </td>
                                 </tr>
                             ))
@@ -73,6 +97,12 @@ export default async function AlunosPage() {
                     </tbody>
                 </table>
             </div>
+
+            <Pagination
+                totalItems={total}
+                itemsPerPage={10}
+                currentPage={currentPage}
+            />
         </div>
     );
 }

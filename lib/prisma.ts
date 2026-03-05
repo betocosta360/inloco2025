@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prisma/generated/client';
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient | undefined;
@@ -16,13 +16,16 @@ if (!globalForPrisma.pool) {
 
 const adapter = new PrismaPg(globalForPrisma.pool);
 
-export const prisma =
-  globalForPrisma.prisma ||
+// Usamos uma chave diferente no global para forçar a atualização do cliente após a mudança de schema
+const prisma =
+  // (global as any).prisma ||
   new PrismaClient({
     adapter,
     log: ['error', 'warn'],
   });
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+  (global as any).prisma = prisma;
 }
+
+export { prisma };

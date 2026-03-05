@@ -14,6 +14,7 @@ export default function BannerForm({ initialData }: { initialData?: any }) {
         id: initialData?.id || '',
         titulo: initialData?.titulo || '',
         subtitulo: initialData?.subtitulo || '',
+        descricao: initialData?.descricao || '',
         imagem: initialData?.imagem || '',
         link: initialData?.link || '',
         ordem: initialData?.ordem || 0,
@@ -62,21 +63,30 @@ export default function BannerForm({ initialData }: { initialData?: any }) {
         <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm">
             <div className="grid grid-cols-1 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-zinc-700 mb-1">Título (Opcional)</label>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Identificação Interna (Título)</label>
                     <input
                         type="text"
                         className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        placeholder="Ex: Banner Matrículas 2024"
                         value={formData.titulo}
                         onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-zinc-700 mb-1">Subtítulo (Opcional)</label>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Título no Site (Subtítulo)</label>
                     <input
                         type="text"
                         className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
                         value={formData.subtitulo}
                         onChange={(e) => setFormData({ ...formData, subtitulo: e.target.value })}
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Descrição no Site</label>
+                    <textarea
+                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all min-h-[100px]"
+                        value={formData.descricao}
+                        onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
                     />
                 </div>
 

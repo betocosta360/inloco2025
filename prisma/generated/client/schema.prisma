@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  titulo    String?
+  subtitulo String?
+  descricao String?
+  imagem    String
+  link      String?
+  ordem     Int      @default(0)
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Equipe {
+  id        String   @id @default(cuid())
+  nome      String
+  cargo     String
+  imagem    String
+  descricao String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Curso {
+  id        String   @id @default(cuid())
+  nome      String
+  descricao String
+  duracao   String
+  nivel     String
+  preco     String
+  imagem    String
+  conteudo  String?
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  alunos    Aluno[]
+  turmas    Turma[]
+}
+
+model Aluno {
+  id              String  @id @default(cuid())
+  nome            String
+  email           String  @unique
+  telefone        String
+  endereco        String
+  foto            String?
+  nomePais        String?
+  telefoneContato String? // Outro contato (pais/responsaveis)
+
+  // Relacionamento com Curso
+  cursoId String
+  curso   Curso  @relation(fields: [cursoId], references: [id])
+
+  // Relacionamento com Turma
+  turmaId String?
+  turma   Turma?  @relation(fields: [turmaId], references: [id])
+
+  // Controle Interno Financeiro
+  financeiros Financeiro[]
+
+  // Vinculo com Depoimentos (para buscar foto)
+  depoimentos Depoimento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Professor {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  biografia String?
+  imagem    String?
+  ativo     Boolean  @default(true)
+  turmas    Turma[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Turma {
+  id         String @id @default(cuid())
+  nome       String
+  horario    String // Ex: 19:00 - 21:00
+  diasSemana String // Ex: Segunda, Quarta, Sexta
+
+  cursoId String
+  curso   Curso  @relation(fields: [cursoId], references: [id])
+
+  professorId String
+  professor   Professor @relation(fields: [professorId], references: [id])
+
+  alunos Aluno[]
+
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Financeiro {
+  id             String    @id @default(cuid())
+  alunoId        String
+  aluno          Aluno     @relation(fields: [alunoId], references: [id])
+  valor          Float
+  dataVencimento DateTime
+  dataPagamento  DateTime?
+  status         String    @default("PENDENTE") // PENDENTE, PAGO, ATRASADO
+  descricao      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Depoimento {
+  id       String  @id @default(cuid())
+  nome     String
+  curso    String
+  texto    String
+  imagem   String?
+  aprovado Boolean @default(false)
+
+  // Link opcional com Aluno para buscar foto automaticamente
+  alunoId String?
+  aluno   Aluno?  @relation(fields: [alunoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promocao {
+  id        String   @id @default(cuid())
+  titulo    String
+  desconto  String
+  cupom     String?
+  ativa     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Administrador {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Configuracao {
+  id             String   @id @default("singleton")
+  historia       String
+  historiaImagem String?
+  historiaVideo  String?
+  missao         String
+  visao          String
+  valores        String
+  telefone       String?
+  email          String?
+  endereco       String?
+  instagram      String?
+  facebook       String?
+  youtube        String?
+  linkedin       String?
+  tiktok         String?
+  slogan         String?
+  updatedAt      DateTime @updatedAt
+}
+
+model Despesa {
+  id         String   @id @default(cuid())
+  descricao  String
+  valor      Float
+  vencimento DateTime
+  categoria  String // Aluguel, Salários, Contas Fixas, etc.
+  pago       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

@@ -1,12 +1,44 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('inicio');
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const sections = ['inicio', 'quem-somos', 'cursos', 'equipe', 'depoimentos'];
+            const scrollPosition = window.scrollY + 100; // Offset for sticky header
+
+            for (const section of sections) {
+                const element = document.getElementById(section);
+                if (element) {
+                    const { offsetTop, offsetHeight } = element;
+                    if (
+                        scrollPosition >= offsetTop &&
+                        scrollPosition < offsetTop + offsetHeight
+                    ) {
+                        setActiveSection(section);
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const menuItems = [
+        { id: 'inicio', label: 'Início', href: '#inicio' },
+        { id: 'quem-somos', label: 'Quem Somos', href: '#quem-somos' },
+        { id: 'cursos', label: 'Cursos', href: '#cursos' },
+        { id: 'equipe', label: 'Equipe', href: '#equipe' },
+        { id: 'depoimentos', label: 'Depoimentos', href: '#depoimentos' },
+    ];
 
     return (
         <header className="sticky top-0 z-40 w-full bg-white shadow-sm">
@@ -22,22 +54,16 @@ export default function Header() {
 
                     {/* Menu Desktop */}
                     <nav className="hidden items-center gap-8 md:flex">
-                        <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                            Início
-                        </a>
-                        <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                            Quem Somos
-                        </a>
-                        <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                            Cursos
-                        </a>
-                        <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                            Equipe
-                        </a>
-                        <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                            Depoimentos
-                        </a>
-
+                        {menuItems.map((item) => (
+                            <a
+                                key={item.id}
+                                href={item.href}
+                                className={`font-medium transition-colors hover:text-blue-600 ${activeSection === item.id ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700'
+                                    }`}
+                            >
+                                {item.label}
+                            </a>
+                        ))}
                     </nav>
 
                     {/* Botão Hambúrguer Mobile */}
@@ -70,22 +96,17 @@ export default function Header() {
                     }`}
             >
                 <nav className="flex flex-col container mx-auto px-4 py-4 space-y-4">
-                    <a href="#" className="block font-medium text-gray-700 hover:text-blue-600">
-                        Início
-                    </a>
-                    <a href="#" className="block font-medium text-gray-700 hover:text-blue-600">
-                        Quem Somos
-                    </a>
-                    <a href="#" className="block font-medium text-gray-700 hover:text-blue-600">
-                        Cursos
-                    </a>
-                    <a href="#" className="block font-medium text-gray-700 hover:text-blue-600">
-                        Equipe
-                    </a>
-                    <a href="#" className="block font-medium text-gray-700 hover:text-blue-600">
-                        Depoimentos
-                    </a>
-
+                    {menuItems.map((item) => (
+                        <a
+                            key={item.id}
+                            href={item.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={`block font-medium hover:text-blue-600 ${activeSection === item.id ? 'text-blue-600' : 'text-gray-700'
+                                }`}
+                        >
+                            {item.label}
+                        </a>
+                    ))}
                 </nav>
             </div>
         </header>

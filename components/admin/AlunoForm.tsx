@@ -11,7 +11,24 @@ interface Curso {
     nome: string;
 }
 
-export default function AlunoForm({ initialData, cursos }: { initialData?: any, cursos: Curso[] }) {
+interface Turma {
+    id: string;
+    nome: string;
+    cursoId: string;
+}
+
+export default function AlunoForm({
+    initialData,
+    cursos,
+    turmas = [],
+    role = 'ADMIN'
+}: {
+    initialData?: any,
+    cursos: Curso[],
+    turmas?: Turma[],
+    role?: string
+}) {
+    const isReadOnly = role === 'PROFESSOR';
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
@@ -25,6 +42,7 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
         nomePais: initialData?.nomePais || '',
         telefoneContato: initialData?.telefoneContato || '',
         cursoId: initialData?.cursoId || '',
+        turmaId: initialData?.turmaId || '',
     });
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +93,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <input
                         type="text"
                         required
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.nome}
                         onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                     />
@@ -86,7 +105,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <input
                         type="email"
                         required
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
@@ -97,7 +117,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <input
                         type="text"
                         required
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.telefone}
                         onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
                     />
@@ -108,7 +129,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <input
                         type="text"
                         required
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.endereco}
                         onChange={(e) => setFormData({ ...formData, endereco: e.target.value })}
                     />
@@ -118,7 +140,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <label className="block text-sm font-medium text-zinc-700 mb-1">Nome dos Pais / Responsável (Opcional)</label>
                     <input
                         type="text"
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.nomePais}
                         onChange={(e) => setFormData({ ...formData, nomePais: e.target.value })}
                     />
@@ -128,7 +151,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <label className="block text-sm font-medium text-zinc-700 mb-1">Contato de Emergência / Pais</label>
                     <input
                         type="text"
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        readOnly={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default' : 'border-zinc-300'}`}
                         value={formData.telefoneContato}
                         onChange={(e) => setFormData({ ...formData, telefoneContato: e.target.value })}
                     />
@@ -138,7 +162,8 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     <label className="block text-sm font-medium text-zinc-700 mb-1">Curso Matriculado</label>
                     <select
                         required
-                        className="w-full px-4 py-2 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all bg-white ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default opcacity-100' : 'border-zinc-300'}`}
                         value={formData.cursoId}
                         onChange={(e) => setFormData({ ...formData, cursoId: e.target.value })}
                     >
@@ -150,13 +175,32 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                 </div>
 
                 <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Turma</label>
+                    <select
+                        disabled={isReadOnly || !formData.cursoId}
+                        className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-zinc-900 outline-none transition-all bg-white ${isReadOnly ? 'bg-zinc-50 border-zinc-200 cursor-default opacity-100' : 'border-zinc-300'}`}
+                        value={formData.turmaId}
+                        onChange={(e) => setFormData({ ...formData, turmaId: e.target.value })}
+                    >
+                        <option value="">Selecione uma turma...</option>
+                        {turmas
+                            .filter(t => t.cursoId === formData.cursoId)
+                            .map((turma) => (
+                                <option key={turma.id} value={turma.id}>{turma.nome}</option>
+                            ))}
+                    </select>
+                </div>
+
+                <div>
                     <label className="block text-sm font-medium text-zinc-700 mb-1">Foto do Aluno</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200"
-                    />
+                    {!isReadOnly && (
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200"
+                        />
+                    )}
                     {formData.foto && (
                         <div className="mt-2 text-[10px] text-zinc-400 truncate">
                             URL: {formData.foto}
@@ -171,15 +215,17 @@ export default function AlunoForm({ initialData, cursos }: { initialData?: any, 
                     onClick={() => router.back()}
                     className="px-4 py-2 text-zinc-600 hover:text-zinc-900 font-medium transition-colors"
                 >
-                    Cancelar
+                    {isReadOnly ? 'Voltar' : 'Cancelar'}
                 </button>
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-zinc-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-zinc-800 transition-colors disabled:opacity-50"
-                >
-                    {loading ? 'Salvando...' : 'Salvar Aluno'}
-                </button>
+                {!isReadOnly && (
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="bg-zinc-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-zinc-800 transition-colors disabled:opacity-50"
+                    >
+                        {loading ? 'Salvando...' : 'Salvar Aluno'}
+                    </button>
+                )}
             </div>
         </form>
     );

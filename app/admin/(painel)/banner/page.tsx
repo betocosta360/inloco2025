@@ -24,7 +24,7 @@ export default async function AdminBanner() {
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-zinc-50 border-b border-zinc-200">
-                            <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Título</th>
+                            <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider">Identificação (Interno)</th>
                             <th className="px-6 py-4 font-semibold text-zinc-700 text-xs uppercase tracking-wider text-right">Ações</th>
                         </tr>
                     </thead>

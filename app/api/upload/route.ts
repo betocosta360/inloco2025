@@ -11,9 +11,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Nenhum arquivo enviado' }, { status: 400 });
         }
 
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'video/mp4'];
         if (!allowedTypes.includes(file.type)) {
-            return NextResponse.json({ error: 'Tipo de arquivo não permitido. Use JPG, PNG, WEBP ou GIF.' }, { status: 400 });
+            return NextResponse.json({ error: 'Tipo de arquivo não permitido. Use imagens (JPG, PNG, WEBP) ou vídeos (MP4).' }, { status: 400 });
         }
 
         const bytes = await file.arrayBuffer();

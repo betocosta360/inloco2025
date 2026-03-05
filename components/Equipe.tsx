@@ -35,11 +35,11 @@ export default function Equipe({ data }: { data: EquipeItem[] }) {
     <section className="py-24 bg-white dark:bg-black overflow-hidden" id="equipe">
       <div className="container mx-auto px-4">
         <div className="text-center mb-20 max-w-3xl mx-auto">
-          <h2 className="text-4xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter sm:text-5xl">
+          <h2 className="text-4xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter sm:text-5xl opacity-0 animate-reveal">
             Nossa Equipe
           </h2>
           <div className="mt-4 w-20 h-1.5 bg-zinc-900 dark:bg-zinc-100 mx-auto rounded-full"></div>
-          <p className="mt-6 text-lg text-zinc-500 font-medium">
+          <p className="mt-6 text-lg text-zinc-500 font-medium opacity-0 animate-reveal reveal-delay-1">
             Conheça os profissionais que fazem a Inloco acontecer todos os dias.
           </p>
         </div>

@@ -44,6 +44,7 @@ export default function Depoimentos({ data }: { data: DepoimentoItem[] }) {
                         <h2 className="text-4xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter sm:text-5xl">
                             O que dizem nossos alunos
                         </h2>
+                        <div className="mt-4 w-20 h-1.5 bg-zinc-900 dark:bg-zinc-100 mx-auto md:mx-0 rounded-full"></div>
                         <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">
                             Histórias reais de quem transformou sua carreira com a InLoco Cursos.
                         </p>

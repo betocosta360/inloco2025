@@ -1,18 +1,40 @@
 'use client';
 
 import { useState } from 'react';
+import { validateLogin } from '@/lib/actions';
 
 export default function AdminLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Salva o email como nome do admin na sessão local
-        const adminName = email.split('@')[0];
-        localStorage.setItem('adminName', adminName.charAt(0).toUpperCase() + adminName.slice(1));
-        localStorage.setItem('adminEmail', email);
-        window.location.href = '/admin';
+        setError('');
+        setLoading(true);
+
+        try {
+            const res = await validateLogin(email, password);
+
+            if (res.success) {
+                localStorage.setItem('adminName', res.nome || 'Admin');
+                localStorage.setItem('adminEmail', email);
+                localStorage.setItem('userRole', res.role || 'ADMIN');
+
+                if (res.role === 'PROFESSOR') {
+                    window.location.href = '/admin/turmas';
+                } else {
+                    window.location.href = '/admin';
+                }
+            } else {
+                setError(res.error || 'Erro ao realizar login.');
+            }
+        } catch (err) {
+            setError('Erro no servidor. Tente novamente.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -34,6 +56,11 @@ export default function AdminLogin() {
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-slate-200">
                     <form className="space-y-6" onSubmit={handleLogin}>
+                        {error && (
+                            <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-lg text-sm font-medium">
+                                {error}
+                            </div>
+                        )}
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-slate-700">
                                 E-mail Corporativo
@@ -95,9 +122,10 @@ export default function AdminLogin() {
                         <div>
                             <button
                                 type="submit"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                                disabled={loading}
+                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
                             >
-                                Entrar no Painel
+                                {loading ? 'Entrando...' : 'Entrar no Painel'}
                             </button>
                         </div>
                     </form>

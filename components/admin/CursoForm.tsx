@@ -19,6 +19,7 @@ export default function CursoForm({ initialData }: { initialData?: any }) {
         duracao: initialData?.duracao || '',
         nivel: initialData?.nivel || 'Iniciante',
         categoria: initialData?.categoria || 'Informática',
+        conteudo: initialData?.conteudo || '',
         ativo: initialData?.ativo ?? true,
     });
 
@@ -75,7 +76,7 @@ export default function CursoForm({ initialData }: { initialData?: any }) {
                 </div>
 
                 <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-zinc-700 mb-1">Descrição</label>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Descrição Curta (Vitrine)</label>
                     <textarea
                         required
                         rows={3}
@@ -83,6 +84,18 @@ export default function CursoForm({ initialData }: { initialData?: any }) {
                         value={formData.descricao}
                         onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
                     />
+                </div>
+
+                <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Conteúdo Detalhado (Modal "Saiba Mais")</label>
+                    <textarea
+                        rows={10}
+                        className="w-full px-4 py-3 rounded-lg border border-zinc-300 focus:ring-2 focus:ring-zinc-900 outline-none transition-all font-sans text-sm"
+                        placeholder="Descreva detalhadamente o que será ensinado no curso..."
+                        value={formData.conteudo}
+                        onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
+                    />
+                    <p className="mt-1 text-xs text-zinc-400">Este texto aparecerá quando o aluno clicar em "Mais Detalhes" no site.</p>
                 </div>
 
                 <div className="md:col-span-2 space-y-2">
