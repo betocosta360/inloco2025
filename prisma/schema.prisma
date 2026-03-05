@@ -120,10 +120,10 @@ model Administrador {
 
 model Configuracao {
   id              String   @id @default("singleton")
-  historia        String   @db.Text
-  historiaImagem  String?  @db.Text
-  missao          String   @db.Text
-  visao           String   @db.Text
-  valores         String   @db.Text
+  historia        String
+  historiaImagem  String?
+  missao          String
+  visao           String
+  valores         String
   updatedAt       DateTime @updatedAt
 }

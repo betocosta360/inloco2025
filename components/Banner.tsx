@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 
 interface BannerItem {
   id: string;
-  titulo: string;
-  subtitulo?: string;
-  descricao?: string;
+  titulo: string | null;
+  subtitulo: string | null;
+  descricao: string | null;
   imagem: string;
+  link?: string | null;
 }
 
 export default function Banner({ data }: { data: BannerItem[] }) {

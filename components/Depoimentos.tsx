@@ -10,7 +10,9 @@ interface DepoimentoItem {
     imagem?: string | null;
     aluno?: {
         foto?: string | null;
-    };
+        [key: string]: any;
+    } | null;
+    [key: string]: any;
 }
 
 export default function Depoimentos({ data }: { data: DepoimentoItem[] }) {
