@@ -24,8 +24,8 @@ export default function AlunoForm({
     role = 'ADMIN'
 }: {
     initialData?: any,
-    cursos: Curso[],
-    turmas?: Turma[],
+    cursos: any[],
+    turmas?: any[],
     role?: string
 }) {
     const isReadOnly = role === 'PROFESSOR';

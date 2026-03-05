@@ -10,7 +10,7 @@ interface Aluno {
     nome: string;
 }
 
-export default function FinanceiroForm({ initialData, alunos }: { initialData?: any, alunos: Aluno[] }) {
+export default function FinanceiroForm({ initialData, alunos }: { initialData?: any, alunos: any[] }) {
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
