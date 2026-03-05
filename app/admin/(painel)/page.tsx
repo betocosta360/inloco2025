@@ -37,14 +37,14 @@ export default async function AdminDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow group">
                         <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest group-hover:text-zinc-600 transition-colors">Turmas</h3>
-                        <p className="text-4xl font-black mt-2 text-zinc-900">{turmas.total}</p>
+                        <p className="text-4xl font-black mt-2 text-zinc-900">{turmas.total || 0}</p>
                         <Link href="/admin/turmas" className="text-xs font-bold text-zinc-900 mt-6 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                             Gerenciar <span className="text-lg">→</span>
                         </Link>
                     </div>
                     <div className="bg-white p-6 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow group">
                         <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-widest group-hover:text-zinc-600 transition-colors">Alunos</h3>
-                        <p className="text-4xl font-black mt-2 text-zinc-900">{alunos.total}</p>
+                        <p className="text-4xl font-black mt-2 text-zinc-900">{alunos.total || 0}</p>
                         <Link href="/admin/alunos" className="text-xs font-bold text-zinc-900 mt-6 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                             Gerenciar <span className="text-lg">→</span>
                         </Link>

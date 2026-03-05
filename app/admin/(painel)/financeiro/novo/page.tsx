@@ -7,7 +7,7 @@ export default async function NovoLançamentoPage() {
     return (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-zinc-800 tracking-tight">Novo Lançamento Financeiro</h2>
-            <FinanceiroForm alunos={alunos} />
+            <FinanceiroForm alunos={alunos.data} />
         </div>
     );
 }

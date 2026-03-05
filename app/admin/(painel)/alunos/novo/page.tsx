@@ -22,7 +22,7 @@ export default async function NovoAluno() {
                 <h2 className="text-2xl font-bold text-zinc-800 tracking-tight">Novo Aluno</h2>
                 <p className="text-zinc-500 text-sm">Cadastre um novo estudante no sistema.</p>
             </div>
-            <AlunoForm cursos={cursos} turmas={turmas} />
+            <AlunoForm cursos={cursos.data} turmas={turmas.data} />
         </div>
     );
 }

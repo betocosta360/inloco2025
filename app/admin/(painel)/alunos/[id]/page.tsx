@@ -29,7 +29,7 @@ export default async function EditarAluno({ params }: { params: Promise<{ id: st
                     {isProfessor ? 'Visualize os dados cadastrais do estudante.' : 'Modifique os dados do estudante.'}
                 </p>
             </div>
-            <AlunoForm initialData={aluno} cursos={cursos} turmas={turmas} role={role} />
+            <AlunoForm initialData={aluno} cursos={cursos.data} turmas={turmas.data} role={role} />
         </div>
     );
 }

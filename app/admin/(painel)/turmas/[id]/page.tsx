@@ -32,8 +32,8 @@ export default async function EditarTurma({ params }: { params: Promise<{ id: st
             </div>
             <TurmaForm
                 turma={turma}
-                cursos={cursos}
-                professores={professores}
+                cursos={cursos.data}
+                professores={professores.data}
                 role={role}
                 currentProfessorId={currentProfessorId}
             />

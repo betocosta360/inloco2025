@@ -25,8 +25,8 @@ export default async function NovaTurma() {
                 <p className="text-zinc-500 text-sm">Configure uma nova turma e atribua um professor.</p>
             </div>
             <TurmaForm
-                cursos={cursos}
-                professores={professores}
+                cursos={cursos.data}
+                professores={professores.data}
                 role={role}
                 currentProfessorId={currentProfessorId}
             />

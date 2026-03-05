@@ -13,7 +13,7 @@ export default async function EditFinanceiroPage(props: { params: Promise<{ id: 
     return (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-zinc-800 tracking-tight">Editar Lançamento</h2>
-            <FinanceiroForm initialData={registro} alunos={alunos} />
+            <FinanceiroForm initialData={registro} alunos={alunos.data} />
         </div>
     );
 }
